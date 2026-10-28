@@ -10,6 +10,14 @@ which mean that is is unchangeable and read-only
 const PI = 3.14;
 ```
 
+#### Table of Contents
+- [Constant Types](#constant-types)
+	- [Typed Constants](#typed-constants)
+	- [AutoTyped Constants](#autotyped-constants)
+	- [Constant Arrays](#constant-arrays)	
+
+---
+
 ## Constant Types
 Constant variable is the only dynamically typed
 variable ever in JSmm programming language.
@@ -34,3 +42,13 @@ const b = "Alice Bobbison";
 
 cat(a, b);
 ```
+
+### Constant Arrays
+More details in [array](./array.md)
+
+```js
+const items[3] = ["string", 14, true]
+```
+
+each and every index of the `items` array
+cannot be redefine. 
