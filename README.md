@@ -21,10 +21,18 @@ Read the [contributing guide](./CONTRIBUTING.md) of JSMM for jsddoc and jsmm
 **Note**: This repository only contains the documented language and concepts. 
 Please note that the code is kept in a separate repository.
 
-#### Table of Language specifications content
-The detailed and formal documents for JSmm programming language.
+#### Language specifications tutorial
+Detailed friendly tutorials and usage for JSmm programming language.
 - [JSmm Syntax](./spec/syntax.md)
+- [JSmm Comments](./spec/comments.md)
+- [JSmm Variables](./spec/var.md)
+- [JSmm Constants](./spec/const.md)
 - [JSmm Data Types](./spec/types.md)
+- [JSmm Arrays](./spec/array.md)
+
+#### Language spec with EBNF
+Detailed Dossier of Language Specification 
+with EBNF
 
 ## Joining
 Source code is all opensource, free of charge for usage and changes.
