@@ -23,6 +23,7 @@ Please note that the code is kept in a separate repository.
 
 #### Table of Language specifications content
 The detailed and formal documents for JSmm programming language.
+- [JSmm Syntax](./spec/syntax.md)
 - [JSmm Data Types](./spec/types.md)
 
 ## Joining
