@@ -10,7 +10,6 @@ JSmm provides a minimal type system designed to keep declarations intuitive whil
   - [bool](#bool)
   - [void](#void)
   - [bytes](#bytes)
-  - [array](#array)
 - [Union Types](#union-types)
   - [Union Type Checking](#union-type-checking)
   - [Union Types with Variables](#union-types-with-variables)
