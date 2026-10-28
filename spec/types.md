@@ -63,11 +63,6 @@ Represents a dynamically sized sequence of raw bytes, designed for efficient bin
 - **Syntax:** `bytes <identifier> = [<hex_or_integer_literals>];`
 - **Example:** `bytes stream = [0x00, 0xFF];`
 
-### `array`
-Represents a dynamically sized collection that can contain values of different types. Mixed arrays provide flexibility for heterogeneous data, with potential performance overhead compared to homogeneous arrays.
-- **Syntax:** `array <identifier> = [<elements>];`
-- **Example:** `array items = [1, "two", false];`
-
 ---
 
 ## Union Types
