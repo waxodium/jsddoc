@@ -10,9 +10,4 @@ This language is keyword-based for declarations, with operators and punctuation 
 JSmm types and function declarations rules may differ from C and C-like languages. 
 Because it uses **multiple possible return types** but DOES NOT return multiple types at once.
 
-## Operators
 
-```txt
-
-
-```
