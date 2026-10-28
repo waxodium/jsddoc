@@ -4,7 +4,7 @@ Official repository for JSmm programming language test cases, documentations and
 Involving repository source:
 https://github.com/waxodium/jsmm
 
-[![License: MIT](./assets/license-mit.svg)](./LICENSE)
+![License: MIT](./assets/license-mit.svg)
 
 ## Getting Started
 Check the Installation steps from [jsmm homepage](https://github.com/waxodium/jsmm#home).
