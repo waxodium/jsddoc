@@ -2,219 +2,275 @@
 
 #### Table of Contents
 
-* [Built-in Types](#built-in-types)
-    * [auto](#auto)
-    * [string](#string)
-    * [number](#number)
-    * [bool](#bool)
-    * [void](#void)
-    * [bytes](#bytes)
-
-
-* [Union Types](#union-types)
-    * [Union Type Checking](#union-type-checking)
-    * [Union Types with Variables](#union-types-with-variables)
-    * [Union Types vs `auto`](#union-types-vs-auto)
-
-
-
-
-* [Type Compatibility](#type-compatibility)
-    * [Assignment Compatibility](#assignment-compatibility)
-    * [Parameter Compatibility](#parameter-compatibility)
-    * [Return Type Compatibility](return-type-compatibility)
-
-
-* [Type Inference](#type-inference)
-    * [Inference Limitations](#inference-limitations)
-
-
-* [Type Errors](#type-errors)
-    * [Incompatible Assignment](#incompatible-assignment)
-    * [Invalid Operation](#invalid-operation)
-    * [Invalid Return Type](#invalid-return-type)
-    * [Invalid Argument](#invalid-argument)
-
-
+- [Built-in Types](#built-in-types)
+  - [`auto`](#auto)
+  - [`string`](#string)
+  - [`number`](#number)
+  - [`bool`](#bool)
+  - [`void`](#void)
+  - [`bytes`](#bytes)
+- [Type Aliases](#type-aliases)
+  - [Declaration Syntax](#declaration-syntax)
+  - [Examples](#examples)
+- [Union Types](#union-types)
+  - [Union Type Checking](#union-type-checking)
+  - [Union Types with Variables](#union-types-with-variables)
+  - [Union Types vs `auto`](#union-types-vs-auto)
+- [Type Compatibility](#type-compatibility)
+  - [Assignment Compatibility](#assignment-compatibility)
+  - [Parameter Compatibility](#parameter-compatibility)
+  - [Return Type Compatibility](#return-type-compatibility)
+- [Type Inference](#type-inference)
+  - [Inference Limitations](#inference-limitations)
+- [Type Errors](#type-errors)
+  - [Incompatible Assignment](#incompatible-assignment)
+  - [Invalid Operation](#invalid-operation)
+  - [Invalid Return Type](#invalid-return-type)
+  - [Invalid Argument](#invalid-argument)
 
 ---
 
 ## Built-in Types
 
-List of types supported in the JSmm programming language:
+JSmm provides built-in types for common values and operations.
 
 ### `auto`
 
 Infers a value's type at compile time, reducing the need for explicit type annotations while preserving static type checking.
 
-* **Syntax:** `auto <identifier> = <expression>;`
-* **Example:** `auto value = 42;`
+- **Syntax:** `auto <identifier> = <expression>;`
+- **Example:**
+
+```js
+auto value = 42;
+```
 
 ### `string`
 
 Represents text and provides a dedicated type for working with textual data.
 
-* **Syntax:** `string <identifier> = "<value>";`
-* **Example:** `string message = "hello";`
+- **Syntax:** `string <identifier> = "<value>";`
+- **Example:**
+
+```js
+string message = "hello";
+```
 
 ### `number`
 
 Represents numeric values, including integers and floating-point numbers, through a unified numeric type.
 
-* **Syntax:** `number <identifier> = <numeric_literal>;`
-* **Example:** `number ratio = 3.14;`
+- **Syntax:** `number <identifier> = <numeric_literal>;`
+- **Example:**
+
+```js
+number ratio = 3.14;
+number count = 42;
+```
 
 ### `bool`
 
-Represents Boolean truth values, either `true` or `false`.
+Represents Boolean truth values: `true` and `false`.
 
-* **Syntax:** `bool <identifier> = <boolean_literal>;`
-* **Example:** `bool isReady = true;`
+- **Syntax:** `bool <identifier> = <boolean_literal>;`
+- **Example:**
+
+```js
+bool isReady = true;
+```
 
 ### `void`
 
 Indicates that a function does not return a value.
 
-* **Syntax:** `void <identifier>(<parameters>) { ... }`
-* **Example:** `void clear() {}`
+- **Syntax:** `void <identifier>(<parameters>) { ... }`
+- **Example:**
+
+```js
+void clear() {}
+```
 
 ### `bytes`
 
-Represents a dynamically sized sequence of raw bytes, designed for efficient binary data processing.
+Represents a dynamically sized sequence of raw bytes, intended for binary data.
 
-* **Syntax:** `bytes <identifier> = [<hex_or_integer_literals>];`
-* **Example:** `bytes stream = [0x00, 0xFF];`
+- **Syntax:** `bytes <identifier> = [<byte_literals>];`
+- **Example:**
+
+```js
+bytes stream = [0x00, 0xFF];
+```
+
+`bytes` is intended for raw binary data, whereas `string` represents text. Their operations and memory semantics are separate.
+
+---
+
+## Type Aliases
+
+A type alias introduces a reusable name for a type expression. JSmm uses the `type` keyword to declare aliases.
+
+Aliases allow developers to give meaningful names to existing types and define reusable types without introducing a separate built-in keyword for every type variation.
+
+### Declaration Syntax
+
+```js
+type <name> = <type_expression>;
+```
+
+- `type` is the declaration keyword.
+- `<name>` is the alias being defined.
+- `<type_expression>` specifies the underlying type.
+
+The `type` keyword is used in declarations. It is not itself a type, and it does not create a runtime value.
+
+### Examples
+
+An alias can provide a more descriptive name for an existing type.
+
+```js
+type identifier = number;
+type message = string;
+
+identifier value = 42;
+message text = "hello";
+```
+
+Here, `identifier` refers to `number`, while `message` refers to `string`.
+
+Aliases can also name custom integer types:
+
+```js
+type byte = int(1, unsigned);
+type registers_3bytes = int(3, unsigned);
+```
+
+These examples use the built-in `int()` function to specify integer storage size in bytes and signedness. The aliases provide reusable names for those type expressions.
+
+<text color="secondary" size="sm">**Note:** `int(size, signedness)` is a proposed built-in type-defining function. For example, `int(1, unsigned)` specifies an unsigned integer with a one-byte storage size. Supported sizes and integer representation rules must be defined by the language specification.</text>
+
+### Naming Rules
+
+Type alias names follow JSmm's identifier naming rules.
+
+The `type` keyword is reserved for type alias declarations and cannot be used as an ordinary identifier.
+
+The language must define whether aliases can reference declarations that appear later in the source and how duplicate or cyclic alias declarations are diagnosed.
 
 ---
 
 ## Union Types
 
-Union types allow a variable, parameter, or function return value to represent more than one type. In JSmm, union types are declared by separating multiple types with a comma (`,`).
+Union types allow a variable, parameter, or function return value to represent more than one type.
 
-This allows functions to accept different kinds of values while preserving static type checking.
+In JSmm, union types are declared by separating multiple types with a comma.
 
-#### Syntax
+### Syntax
 
 ```js
 type1, type2 functionName(parameters) {
-    // function body
+    // Function body
 }
-
 ```
 
-The declared types represent the possible types of the function's return value.
+The declared types represent the possible return types of the function.
 
-#### Example
+### Example
 
 ```js
 string, number add(auto a) {
     if (typeof a == number) {
-        return a + 1; // returns number
+        return a + 1;
     }
-    return a; // returns string
-}
 
+    return a;
+}
 ```
 
-In this example, `add` accepts a parameter of type `auto` and can return either a `number` or a `string`.
+In this example, `add` declares that it can return either a `string` or a `number`.
 
-* If `a` is a number, the function returns `a + 1`.
-* Otherwise, it returns `a` as a string, assuming the input is a string.
+- If `a` is a number, the function returns `a + 1`.
+- Otherwise, the function returns `a`, provided that the value is a string.
 
-The return type signature `string, number` explicitly declares both possible output paths.
+The return signature `string, number` declares the permitted return types.
 
 ### Union Type Checking
 
-JSmm verifies that a function's return statements are structurally compatible with its declared return types.
+JSmm checks whether return statements are compatible with the function's declared return types.
 
 ```js
 string, number getValue(bool condition) {
     if (condition) {
         return 42;
     }
+
     return "hello";
 }
-
 ```
 
-Both return statements are valid because the function lists `number` and `string` as permissible return targets. Conversely, returning a type outside the declared union triggers a compile-time type error:
+Both return statements use types declared in the return signature.
+
+Returning an undeclared type is invalid:
 
 ```js
 string, number getValue() {
     return true; // Type error: bool is not allowed
 }
-
 ```
 
 ### Union Types with Variables
 
-Union types are also valid when a single variable needs to hold different payload types throughout execution.
+A union declaration can allow a variable to hold values of different permitted types.
 
 ```js
 string, number value = 10;
 value = "hello";
-
 ```
 
-Here, `value` can safely alternate between holding a number and a string.
+The declared union allows `value` to hold either a string or a number, subject to the language's assignment and type-checking rules.
 
-In JSmm, all keywords for built-in types when used on a variable
-mean that those variables can be modified following the expected types
-they are given. As for constants, it is a variable that is read-only. Resulting
-in multiple declarations:
+A `const` declaration makes a variable read-only after initialization. It does not mean that the variable can be redeclared.
 
-```js
-const string, number = "hello"; // rejected: const cannot be redefined
+### Union Types vs `auto`
 
-```
-
-#### Union Types vs `auto`
-
-The `auto` type infers a concrete, single type at compile time from its initializer, whereas a union type explicitly allows multiple dynamic assignments.
+`auto` infers a single type from an initializer, whereas a union explicitly declares multiple permitted types.
 
 ```js
 auto count = 10;
 string, number value = 10;
-
 ```
 
-In this code:
+- `count` infers its type from the initializer as `number`.
+- `value` explicitly permits `string` and `number`.
 
-* `count` has its type inferred strictly as `number`.
-* `value` is explicitly opened to accept either a `string` or a `number`.
-
-> Use `auto` for strict single-type inference from an initializer.
-> Use a union declaration when a variable must accept assignments from multiple distinct types.
+Use `auto` when a single inferred type is sufficient. Use a union when multiple types must be permitted by the declaration.
 
 ---
 
 ## Type Compatibility
 
-Type compatibility determines whether a value can be cleanly assigned to a variable, passed as a function argument, or returned from an active routine. JSmm checks these relationships during compilation.
+Type compatibility determines whether a value can be assigned to a variable, passed to a function, or returned from a function. JSmm checks these relationships during compilation.
 
 ### Assignment Compatibility
 
-A value can be assigned to a variable only when its underlying type matches or satisfies the target variable's type constraints.
+A value can be assigned to a variable when its type satisfies the target type's compatibility rules.
 
 ```js
 number age = 25;
 string name = "Alex";
 bool active = true;
-
 ```
 
-The following initialization illustrates an incompatible assignment variant:
+An incompatible assignment produces a type error:
 
 ```js
 number age = "twenty-five"; // Type error
-
 ```
 
-A `string` literal cannot be bound to a variable declared as `number` unless a primitive type cast or explicit coercion option is used.
+Conversions between types are governed by JSmm's conversion rules.
 
 ### Parameter Compatibility
 
-Arguments passed into a function must conform to their corresponding parameter declarations.
+Arguments passed to a function must be compatible with their corresponding parameter types.
 
 ```js
 number square(number n) {
@@ -222,80 +278,81 @@ number square(number n) {
 }
 
 number result = square(5);
-
 ```
 
-Passing an argument out of bounds results in an upfront compiler rejection:
+Passing an incompatible argument is invalid:
 
 ```js
 number result = square("five"); // Type error
-
 ```
 
 ### Return Type Compatibility
 
-A function's execution branches must yield values that align with its declared return signature.
+A function's return statements must conform to its declared return type.
 
 ```js
 number getCount() {
     return 10;
 }
 
-void printCount() {
-    // Performs an operation without returning a value
+void clear() {
+    // Performs an operation without returning a value.
 }
-
 ```
 
 ---
 
 ## Type Inference
 
-Type inference allows JSmm to determine an assignment's concrete type implicitly, eliminating boilerplate annotations without compromising the integrity of static type checks.
+Type inference allows JSmm to determine a variable's type from its initializer, reducing the need for explicit annotations while preserving static type checking.
 
 ```js
 auto name = "Alice";
 auto age = 25;
 auto isActive = true;
-
 ```
 
-The engine evaluates the code and derives the following map:
+The inferred types are:
 
-| Declaration | Inferred Type |
-| --- | --- |
-| name | `string` |
-| age | `number` |
-| isActive | `bool` |
+| Declaration | Inferred type |
+|---|---|
+| `name` | `string` |
+| `age` | `number` |
+| `isActive` | `bool` |
 
 ### Inference Limitations
 
-Type inference relies on explicit initialization paths. If an expression leaves the expected layout ambiguous, an explicit type signature must be provided.
+Type inference depends on the information available to the compiler. When a type cannot be determined unambiguously, an explicit type declaration may be required.
 
 ```js
-auto value = 10; // Explicitly initialized: infers number safely.
-
+auto value = 10;
 ```
+
+Here, the initializer provides enough information to infer `number`.
+
+The language specification must define inference behavior for expressions involving unions, aliases, and function calls.
 
 ---
 
 ## Type Errors
 
-Type errors occur when an operational expression breaks the structural typing of JSmm.
+Type errors occur when a declaration, assignment, operation, argument, or return value violates JSmm's type rules.
 
 ### Incompatible Assignment
 
 ```js
 number count = "hello";
-
 ```
+
+The string value is incompatible with the declared numeric type.
 
 ### Invalid Operation
 
 ```js
 number result = 10 + "hello";
-
 ```
+
+The operands are incompatible under the numeric addition rules.
 
 ### Invalid Return Type
 
@@ -303,8 +360,9 @@ number result = 10 + "hello";
 number getValue() {
     return "hello";
 }
-
 ```
+
+The function declares `number` but returns a string.
 
 ### Invalid Argument
 
@@ -314,5 +372,17 @@ number double(number value) {
 }
 
 double(true);
-
 ```
+
+The argument is a Boolean value, but the function expects a number.
+
+### Invalid Type Alias
+
+A type alias must refer to a valid type expression.
+
+```js
+type invalid = unknown_type;
+```
+
+If `unknown_type` is not a declared or built-in type, the compiler should report an invalid type reference.
+
