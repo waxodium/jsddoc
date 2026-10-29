@@ -2,7 +2,7 @@
 
 #### Table of Contents
 
-* [Built-in Types]
+* [Built-in Types](#built-in-types)
     * [auto](#auto)
     * [string](#string)
     * [number](#number)
@@ -19,17 +19,17 @@
 
 
 
-* [Type Compatibility]
+* [Type Compatibility](#type-compatibility)
     * [Assignment Compatibility](#assignment-compatibility)
     * [Parameter Compatibility](#parameter-compatibility)
     * [Return Type Compatibility](return-type-compatibility)
 
 
-* [Type Inference]
+* [Type Inference](#type-inference)
     * [Inference Limitations](#inference-limitations)
 
 
-* [Type Errors]
+* [Type Errors](#type-errors)
     * [Incompatible Assignment](#incompatible-assignment)
     * [Invalid Operation](#invalid-operation)
     * [Invalid Return Type](#invalid-return-type)
