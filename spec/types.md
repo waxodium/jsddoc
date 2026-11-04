@@ -27,6 +27,7 @@
   - [Invalid Operation](#invalid-operation)
   - [Invalid Return Type](#invalid-return-type)
   - [Invalid Argument](#invalid-argument)
+- [Integer Type](./int.md)
 
 ---
 
