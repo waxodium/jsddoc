@@ -30,9 +30,15 @@ Detailed friendly tutorials and usage for JSmm programming language.
 - [JSmm Data Types](./spec/types.md)
 - [JSmm Arrays](./spec/array.md)
 
+#### Built-in Functions
+- [cat()](./func/cat.md)
+- [syscall()](./func/syscall.md)
+
+#### Built-in Properties
+- [.length](./property/length.md)
+
 #### Language spec with EBNF
-Detailed Dossier of Language Specification 
-with EBNF
+-- NONE --
 
 ## Joining
 Source code is all opensource, free of charge for usage and changes.
