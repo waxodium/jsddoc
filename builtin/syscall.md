@@ -1,26 +1,26 @@
 # The `syscall()` Builtin
 
-`syscall()` invokes a Linux x86_64 system call directly. 
+`syscall()` invokes a Linux x86_64 system call directly.
 
 ```js
-number pid = syscall(39);
+auto pid = syscall(39);
 cat(pid);
 ```
 
-The first argument is the system call number. Up to six more arguments are passed to the kernel. The result is returned as a `number`.
+The first argument is the system call number. Up to six more arguments are passed to the kernel. The result is returned as an `i32`.
 
 `syscall()` is available on the Linux x86_64 target.
 
 ## Arguments
 
 | Position | Meaning | Allowed types |
-| --- | --- | --- |
-| 1 | system call number | `number`, `byte`, `int`, pointer |
-| 2–7 | system call arguments | `number`, `byte`, `int`, pointer |
+|----------|---------|---------------|
+| 1 | system call number | `i32`, pointer |
+| 2-7 | system call arguments | `i32`, pointer |
 
 Numbers are converted to 64-bit integers. Pointer arguments are passed as raw addresses. The first argument is the system call number and should be numeric; pointers are only meaningful for the remaining arguments.
 
-Strings, bytes, arrays, objects, and booleans are rejected at compile time. Pass a pointer to the data instead.
+Strings, bytes, booleans, and other types are rejected at compile time. Pass a pointer to the data instead.
 
 A call requires at least the system call number and accepts at most seven arguments in total.
 
@@ -29,30 +29,30 @@ A call requires at least the system call number and accepts at most seven argume
 `39` is `getpid` on Linux x86_64:
 
 ```js
-number pid = syscall(39);
+auto pid = syscall(39);
 cat(pid);
 ```
 
 Extra arguments are allowed and passed through, so a call that takes none can still receive up to six:
 
 ```js
-number pid = syscall(39, 1, 2);
+auto pid = syscall(39, 1, 2);
 ```
 
 A pointer passes an address. This reads up to eight bytes from standard input into `value`:
 
 ```js
-number value = 0;
+auto value = 0;
 syscall(0, 0, &value, 8);
 ```
 
 ## Return value
 
-The kernel's `rax` result is returned as a signed `number`. On success it is the syscall's return value; on failure Linux returns `-errno`, which appears as a negative number:
+The kernel's `rax` result is returned as a signed `i32`. On success it is the syscall's return value; on failure Linux returns `-errno`, which appears as a negative number:
 
 ```js
-number value = 0;
-number result = syscall(0, 0, &value, 8);
+auto value = 0;
+auto result = syscall(0, 0, &value, 8);
 if (result < 0) cat("read failed");
 ```
 
@@ -81,7 +81,7 @@ jsmm: expected type: syscall() accepts at most 7 arguments (syscall number plus 
 Passing an unsupported argument type:
 
 ```js
-string text = "x";
+auto text = "x";
 syscall(1, 1, text, 1);
 ```
 
